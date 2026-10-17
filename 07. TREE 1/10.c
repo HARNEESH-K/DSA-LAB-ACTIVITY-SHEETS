@@ -18,7 +18,7 @@ int query_and_remove(int k, int l, int r, int p) {
 }
 int main() {
     int n;
-    printf("Roll Number: CH.SC.U4CSE25248\n");
+    printf("Roll Number: CH.SC.U4CSE25217\n");
     if (scanf("%d", &n) == 1) {
         for (int i = 1; i <= n; i++) scanf("%d", &arr[i]);
         build(1, 1, n);
