@@ -3,7 +3,7 @@
 int pref[1005][1005];
 int main() {
     int n, q;
-    printf("Roll Number: CH.SC.U4CSE25248\n");
+    printf("Roll Number: CH.SC.U4CSE25217\n");
     if (scanf("%d %d", &n, &q) == 2) {
         for (int i = 1; i <= n; i++) {
             char row[1005];
