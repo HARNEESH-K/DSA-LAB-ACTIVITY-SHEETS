@@ -12,7 +12,7 @@ int get_kth_ancestor(int x, int k) {
     return x;}
 int main() {
     int n, q;
-    printf("Roll Number: CH.SC.U4CSE25248\n");
+    printf("Roll Number: CH.SC.U4CSE25217\n");
     if (scanf("%d %d", &n, &q) == 2) {
         for (int i = 0; i <= n; i++) {
             for (int j = 0; j < 20; j++) up[i][j] = -1;
