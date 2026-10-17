@@ -18,7 +18,7 @@ int main() {
     char story[1000], line[100];
     char nouns[100][50], adverbs[100][50], verbs[100][50], adjectives[100][50];
     int n_cnt = 0, av_cnt = 0, v_cnt = 0, aj_cnt = 0, mode = 0;
-    printf("Roll Number: CH.SC.U4CSE25248\n");
+    printf("Roll Number: CH.SC.U4CSE25217\n");
     if (!fgets(story, sizeof(story), stdin)) return 0;
     story[strcspn(story, "\r\n")] = 0;
     while (fgets(line, sizeof(line), stdin)) {
