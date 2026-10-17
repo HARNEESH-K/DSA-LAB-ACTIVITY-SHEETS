@@ -24,7 +24,7 @@ void union_sets(int u, int v) {
 }
 int main() {
     int n, m;
-    printf("Roll Number: CH.SC.U4CSE25248\n");
+    printf("Roll Number: CH.SC.U4CSE25217\n");
     if (scanf("%d %d", &n, &m) == 2) {
         num_components = n;
         max_size = 1;
