@@ -11,7 +11,7 @@ void printPostOrder(int inStart, int inEnd, int* preIdx, int* pre) {
 }
 int main() {
     int n;
-    printf("Roll Number: CH.SC.U4CSE25248\n");
+    printf("Roll Number: CH.SC.U4CSE25217\n");
     if (scanf("%d", &n) == 1) {
         int* pre = (int*)malloc(n * sizeof(int));
         int* in = (int*)malloc(n * sizeof(int));
