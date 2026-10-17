@@ -6,7 +6,7 @@ int main(){
     char var[3][LEN];
     double m=0,d=0,x=0;
     int qm=0,qd=0,qx=0,i;
-    printf("Roll No: CH.SC.U4CSE25248\n");
+    printf("Roll No: CH.SC.U4CSE25217\n");
     for(i=0;i<3;i++){
         scanf("%s",var[i]);
         if(strcmp(var[i],"M")==0){
