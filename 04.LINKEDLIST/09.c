@@ -48,7 +48,7 @@ void split(struct node *head,struct node **head1,struct node **head2){
     fast->next=*head2;
 }
 int main(){
-    printf("Roll No: CH.SC.U4CSE25248\n");
+    printf("Roll No: CH.SC.U4CSE25217\n");
     struct node *head=NULL,*head1=NULL,*head2=NULL;
     int n,data,i;
     scanf("%d",&n);
