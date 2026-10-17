@@ -26,7 +26,7 @@ int find_ge(int val) {
 }
 int main() {
     int n, q, c_cnt = 0;
-    printf("Roll Number: CH.SC.U4CSE25248\n");
+    printf("Roll Number: CH.SC.U4CSE25217\n");
     if (scanf("%d %d", &n, &q) == 2) {
         for (int i = 1; i <= n; i++) { scanf("%d", &salaries[i]); comp[++c_cnt] = salaries[i]; }
         for (int i = 0; i < q; i++) {
