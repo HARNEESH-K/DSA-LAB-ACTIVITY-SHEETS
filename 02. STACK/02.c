@@ -34,7 +34,7 @@ void merge(myStack *ms1,myStack *ms2){
 int main(){
     int n,m,i,x;
     myStack ms1={NULL},ms2={NULL};
-    printf("Roll No: CH.SC.U4CSE25145\n");
+    printf("Roll No: CH.SC.U4CSE25217\n");
     scanf("%d%d",&n,&m);
     for(i=0;i<n;i++){
         scanf("%d",&x);
