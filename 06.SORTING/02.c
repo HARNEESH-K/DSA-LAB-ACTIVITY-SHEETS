@@ -21,7 +21,7 @@ void printArray(int arr[], int size) {
         printf("%d ", arr[i]);}
     printf("\n");}
 int main() {
-    printf("CH.SC.U4CSE25248\n");
+    printf("CH.SC.U4CSE25217\n");
     int n;
     if (scanf("%d", &n) != 1) return 0;
     int *arr = (int*)malloc(n * sizeof(int));
