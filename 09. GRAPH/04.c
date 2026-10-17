@@ -8,7 +8,7 @@ int find_set(int i) {
 }
 int main() {
     int n, m;
-    printf("Roll Number: CH.SC.U4CSE25248\n");
+    printf("Roll Number: CH.SC.U4CSE25217\n");
     if (scanf("%d %d", &n, &m) == 2) {
         for (int i = 1; i <= n; i++) parent[i] = i;
         for (int i = 0; i < m; i++) {
