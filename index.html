@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browser History Management Using Data Structures | DSA Capstone Project</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- =========================================================================
+       TOP STICKY NAVIGATION
+       ========================================================================= -->
+  <header class="navbar">
+    <div class="container nav-content">
+      <a href="#hero" class="nav-brand">
+        <div class="nav-logo-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
+        <div>
+          <div class="nav-title">Browser History DSA</div>
+        </div>
+        <span class="nav-badge">23CSE203 Capstone</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#simulator">Simulator</a></li>
+          <li><a href="#visualizer">DLL Visualizer</a></li>
+          <li><a href="#inspector-section">Pointer Inspector</a></li>
+          <li><a href="#branching-section">Branch Pruning</a></li>
+          <li><a href="#timeline-section">Timeline &amp; Search</a></li>
+          <li><a href="#comparison">Why DLL?</a></li>
+          <li><a href="#benchmarks">Benchmark</a></li>
+          <li><a href="#test-suite">Test Suite (10/10)</a></li>
+          <li><a href="#viva">Viva Q&amp;A</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="btn-nav-random" class="btn btn-secondary btn-sm" onclick="handleGenerateRandomHistory()">🎲 Random History</button>
+        <button id="btn-nav-clear" class="btn btn-outline-amber btn-sm" onclick="handleClearHistory()">🧹 Clear</button>
+        <a href="#test-suite" class="btn btn-success btn-sm">▶ 10/10 Tests</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       HERO & PROJECT OVERVIEW SECTION
+       ========================================================================= -->
+  <section id="hero" class="hero">
+    <div class="container">
+      <div class="hero-pill-badge">
+        <span class="pulse-dot"></span>
+        <span>AMRITA SCHOOL OF COMPUTING &bull; 23CSE203 DATA STRUCTURES CAPSTONE REVIEW</span>
+      </div>
+
+      <h1 class="hero-title">Browser History Management<br>Using Data Structures</h1>
+      
+      <p class="hero-subtitle">
+        A high-performance bidirectional navigation engine implemented via <strong>Doubly Linked List (DLL)</strong>.
+        Featuring \(O(1)\) constant-time Back and Forward traversal, automated forward-branch pruning with leak-free memory deallocation, and multi-tab isolation.
+      </p>
+
+      <!-- Student & Mentors Metadata Cards -->
+      <div class="meta-grid">
+        <div class="meta-card glass">
+          <div class="meta-avatar">HK</div>
+          <div>
+            <div class="meta-name">Harneesh K</div>
+            <div class="meta-roll">CH.SC.U4CSE25217 &bull; CSE-C</div>
+          </div>
+        </div>
+
+        <div class="meta-card glass">
+          <div class="meta-avatar" style="background: linear-gradient(135deg, #06b6d4, #3b82f6);">HG</div>
+          <div>
+            <div class="meta-name">Harish G</div>
+            <div class="meta-roll">CH.SC.U4CSE25259 &bull; CSE-C</div>
+          </div>
+        </div>
+
+        <div class="meta-card glass">
+          <div class="meta-avatar" style="background: linear-gradient(135deg, #10b981, #059669);">FAC</div>
+          <div>
+            <div class="meta-name">Dr.K.V.MEENATCHI </div>
+            <div class="meta-roll">Faculty Mentors &bull; Dept. of CSE</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Key Performance Statistics Metrics -->
+      <div class="stats-row">
+        <div class="stat-box glass">
+          <div class="stat-value">\(O(1)\)</div>
+          <div class="stat-label">Back / Forward Traversal</div>
+        </div>
+        <div class="stat-box glass">
+          <div class="stat-value">\(O(1)\) Amort.</div>
+          <div class="stat-label">New Page Visit &amp; Insert</div>
+        </div>
+        <div class="stat-box glass">
+          <div class="stat-value">10 / 10</div>
+          <div class="stat-label">Automated Tests Passed</div>
+        </div>
+        <div class="stat-box glass">
+          <div class="stat-value">0 Leaks</div>
+          <div class="stat-label">Deterministic C Deallocation</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 1: OPERATION COMPLEXITY PANEL & STEPPER (POINTS 2 & 3)
+       ========================================================================= -->
+  <section class="section" style="padding-bottom: 1rem;">
+    <div class="container">
+      <!-- Operation Complexity Panel (Point 2) -->
+      <div class="op-complexity-card">
+        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+          <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Active Operation:</span>
+          <span id="op-badge-name" class="op-badge-pill" style="background: rgba(59, 130, 246, 0.25); color: #93c5fd; border-color: rgba(59, 130, 246, 0.5);">INITIAL STATE</span>
+          <span id="op-badge-complexity" class="op-badge-pill complexity-glow-o1">O(1) Constant Time</span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+          <span style="font-size: 0.75rem; color: var(--text-muted);">C Pointer Formula:</span>
+          <div class="pointer-formula-box">
+            <span id="op-formula-code">Node *home = new_node("google.com"); h->head = home;</span>
+          </div>
+          <span style="font-size: 0.75rem; color: #94a3b8; font-family: var(--font-mono);">Latency: <b id="op-latency-val" style="color: #34d399;">0.000 ms</b></span>
+        </div>
+      </div>
+
+      <!-- Step-by-Step Algorithm Pipeline Stepper (Point 3) -->
+      <div class="glass" style="border-radius: var(--radius-lg); padding: 1.25rem 1.75rem; margin-bottom: 2rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap;">
+          <span style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-cyan);">
+            ⚡ Step-by-Step Algorithm Pipeline (Visit / Nav Execution)
+          </span>
+          <span id="stepper-info-text" style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">
+            System Ready. Click any navigation button or type a URL.
+          </span>
+        </div>
+
+        <div class="stepper-pipeline">
+          <div class="step-node completed" id="step-node-1">
+            <div class="step-line"></div>
+            <div class="step-circle">1</div>
+            <div class="step-label">Inspect Current</div>
+          </div>
+          <div class="step-node" id="step-node-2">
+            <div class="step-line"></div>
+            <div class="step-circle">2</div>
+            <div class="step-label">Clear Forward Branch</div>
+          </div>
+          <div class="step-node" id="step-node-3">
+            <div class="step-line"></div>
+            <div class="step-circle">3</div>
+            <div class="step-label">malloc(Node)</div>
+          </div>
+          <div class="step-node" id="step-node-4">
+            <div class="step-line"></div>
+            <div class="step-circle">4</div>
+            <div class="step-label">Link prev Pointer</div>
+          </div>
+          <div class="step-node" id="step-node-5">
+            <div class="step-line"></div>
+            <div class="step-circle">5</div>
+            <div class="step-label">Link next Pointer</div>
+          </div>
+          <div class="step-node" id="step-node-6">
+            <div class="step-circle">6</div>
+            <div class="step-label">Repoint Current</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 2: LIVE BROWSER SIMULATOR
+       ========================================================================= -->
+  <section id="simulator" class="section" style="padding-top: 0;">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Interactive Demonstration</span>
+        <h2 class="section-title">Full Browser Simulator &amp; Multi-Tab Engine</h2>
+        <p class="section-desc">
+          Test real-time browsing navigation backed by live Doubly Linked List instances.
+        </p>
+      </div>
+
+      <!-- Modern Browser Window Mockup -->
+      <div class="browser-mockup">
+        <!-- Titlebar -->
+        <div class="browser-titlebar">
+          <div class="browser-controls">
+            <span class="browser-dot red" title="Close"></span>
+            <span class="browser-dot yellow" title="Minimize"></span>
+            <span class="browser-dot green" title="Maximize"></span>
+          </div>
+
+          <div class="tab-strip" id="tab-strip-container"></div>
+          <button id="btn-new-tab" class="new-tab-btn" title="Open New Tab (Creates independent DLL)">+</button>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="browser-toolbar">
+          <div class="nav-btn-group">
+            <button id="btn-back" class="browser-nav-btn" title="Back (O(1))">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+            </button>
+            <button id="btn-forward" class="browser-nav-btn" title="Forward (O(1))">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+            <button id="btn-reload" class="browser-nav-btn" title="Reload Active Page">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 4 23 10 17 10"></polyline>
+                <polyline points="1 20 1 14 7 14"></polyline>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+              </svg>
+            </button>
+            <button id="btn-home" class="browser-nav-btn" title="Go Home (Google)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            </button>
+          </div>
+
+          <!-- URL Address Input Bar -->
+          <div class="url-bar-container">
+            <span class="url-security-icon" title="HTTPS Secure Connection">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </span>
+            <form id="url-form" style="display: flex; flex: 1; align-items: center; gap: 0.5rem;">
+              <input type="text" id="url-input" class="url-input" placeholder="Type URL (e.g., google.com, youtube.com, wikipedia.org)..." autocomplete="off" />
+              <button type="submit" class="url-submit-btn">Visit</button>
+            </form>
+            <button type="button" id="btn-open-real-tab" class="url-external-btn" title="Open live URL in real external browser tab">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                <polyline points="15 3 21 3 21 9"></polyline>
+                <line x1="10" y1="14" x2="21" y2="3"></line>
+              </svg>
+              <span>Open Online Tab ↗</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Bookmarks Bar -->
+        <div class="bookmarks-bar">
+          <span style="font-size: 0.725rem; color: var(--text-subtle); margin-right: 0.25rem;">Bookmarks:</span>
+          <div class="bookmark-item" data-url="google.com">🔍 Google</div>
+          <div class="bookmark-item" data-url="youtube.com">▶️ YouTube</div>
+          <div class="bookmark-item" data-url="instagram.com">📷 Instagram</div>
+          <div class="bookmark-item" data-url="chatgpt.com">🤖 ChatGPT</div>
+          <div class="bookmark-item" data-url="wikipedia.org">📚 Wikipedia</div>
+          <div class="bookmark-item" data-url="github.com">🐙 GitHub</div>
+          <div class="bookmark-item" data-url="leetcode.com">💻 LeetCode</div>
+          <div class="bookmark-item" data-url="amrita.edu">🏛️ Amrita Portal</div>
+        </div>
+
+        <!-- Preset Demonstration Scenarios Strip (Points 9, 11) -->
+        <div class="scenarios-strip">
+          <span class="scenario-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Interactive Actions:
+          </span>
+          <button id="btn-scenario-1" class="btn btn-secondary btn-sm" title="Runs Slide 2 walkthrough">
+            ▶️ Slide 2 Flow (Google &rarr; YouTube &rarr; Instagram &rarr; ChatGPT &rarr; Back &times; 2 &rarr; Wikipedia)
+          </button>
+          <button id="btn-random-history" class="btn btn-secondary btn-sm" title="Generate randomized browsing history (Point 11)">
+            🎲 Generate Random History
+          </button>
+          <button id="btn-branch-demo" class="btn btn-secondary btn-sm" title="Demonstrate forward branch pruning (Point 5)">
+            ⚡ Run Branch Pruning Demo
+          </button>
+          <button id="btn-clear-history" class="btn btn-outline-amber btn-sm" style="margin-left: auto;" title="Clear history with animated memory deallocation (Point 9)">
+            🧹 Clear History (free())
+          </button>
+        </div>
+
+        <!-- Viewport -->
+        <div class="browser-viewport" id="browser-viewport"></div>
+
+        <!-- Status Bar -->
+        <div class="browser-statusbar">
+          <div class="status-pill">Active Node Pos: <b id="stat-pos">0</b></div>
+          <div class="status-pill">Total Active Pages: <b id="stat-length">1</b></div>
+          <div class="status-pill">DLL Head: <b id="stat-head">google.com</b></div>
+          <div class="status-pill">RAM In Use: <b id="stat-memory">128 Bytes</b></div>
+          <div class="status-pill" style="color: #34d399;">Leak Check: <b>0 Leaks (Self-Pruning)</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 3: DOUBLY LINKED LIST VISUALIZER & POINTER INSPECTOR (POINTS 1 & 4)
+       ========================================================================= -->
+  <section id="visualizer" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Visual Data Structure</span>
+        <h2 class="section-title">Live Doubly Linked List Visualizer &amp; Pointer Inspector</h2>
+        <p class="section-desc">
+          Click any node below to inspect its exact memory address and previous/next pointers in real time.
+        </p>
+      </div>
+
+      <!-- Memory Allocation / Deallocation Counter Strip (Point 4) -->
+      <div class="memory-metrics-strip">
+        <div class="mem-metric-box alloc">
+          <div class="mem-val" id="mem-allocated-count" style="color: #34d399;">1</div>
+          <div class="mem-label">Nodes Allocated (malloc)</div>
+        </div>
+        <div class="mem-metric-box freed">
+          <div class="mem-val" id="mem-freed-count" style="color: #f43f5e;">0</div>
+          <div class="mem-label">Nodes Freed (free)</div>
+        </div>
+        <div class="mem-metric-box active">
+          <div class="mem-val" id="mem-active-count" style="color: #38bdf8;">1</div>
+          <div class="mem-label">Active Nodes in RAM</div>
+        </div>
+        <div class="mem-metric-box">
+          <div class="mem-val" id="mem-ram-bytes" style="color: #a855f7;">128 B</div>
+          <div class="mem-label">Heap Memory Used</div>
+        </div>
+        <div class="mem-metric-box">
+          <div class="mem-val" style="color: #10b981;">0</div>
+          <div class="mem-label">Memory Leaks Detected</div>
+        </div>
+      </div>
+
+      <!-- The Node Track Visualizer -->
+      <div class="visualizer-wrapper">
+        <div class="visualizer-toolbar">
+          <div class="dll-legend">
+            <div class="legend-item">
+              <span class="legend-color" style="background: var(--accent-cyan); box-shadow: 0 0 8px var(--accent-cyan);"></span>
+              <span><strong>CURRENT</strong> Pointer</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color" style="background: var(--accent-emerald);"></span>
+              <span><strong>HEAD</strong> Node</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color" style="background: #38bdf8;"></span>
+              <span>Bidirectional Links (\(prev \leftrightarrow next\))</span>
+            </div>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-muted); font-family: var(--font-mono);">
+            Click any node card to inspect pointers
+          </div>
+        </div>
+
+        <div class="dll-track-container">
+          <div class="dll-track" id="dll-track"></div>
+        </div>
+      </div>
+
+      <!-- Live Pointer Inspector Card (Point 1) -->
+      <div id="inspector-section" class="pointer-inspector-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 0.75rem;">
+          <h3 style="font-size: 1.15rem; color: #60a5fa; display: flex; align-items: center; gap: 0.5rem; margin: 0;">
+            <span>🔍</span> Live Pointer Inspector (Selected Node in RAM)
+          </h3>
+          <span class="glass-pill" style="font-size: 0.72rem; padding: 0.25rem 0.75rem; color: #38bdf8; font-family: var(--font-mono);">
+            struct Node *ptr;
+          </span>
+        </div>
+
+        <div class="inspector-grid">
+          <div class="inspector-field">
+            <div class="inspector-label">Webpage URL</div>
+            <div class="inspector-val" id="inspector-url" style="color: #38bdf8;">google.com</div>
+          </div>
+          <div class="inspector-field">
+            <div class="inspector-label">Memory Address (Heap)</div>
+            <div class="inspector-val" id="inspector-addr" style="color: #a855f7;">0x7FFE00</div>
+          </div>
+          <div class="inspector-field">
+            <div class="inspector-label">Prev Pointer (*prev)</div>
+            <div class="inspector-val" id="inspector-prev" style="color: #34d399;">NULL (Head Origin)</div>
+          </div>
+          <div class="inspector-field">
+            <div class="inspector-label">Next Pointer (*next)</div>
+            <div class="inspector-val" id="inspector-next" style="color: #fbbf24;">NULL (Branch Tail)</div>
+          </div>
+          <div class="inspector-field">
+            <div class="inspector-label">Position Index</div>
+            <div class="inspector-val" id="inspector-pos" style="color: #fff;">Index #0 of 1</div>
+          </div>
+          <div class="inspector-field">
+            <div class="inspector-label">Visited Timestamp</div>
+            <div class="inspector-val" id="inspector-time" style="color: #cbd5e1;">Just now</div>
+          </div>
+        </div>
+
+        <div class="inspector-c-struct" id="inspector-struct">
+          <code>Node = { .url = "google.com", .prev = NULL, .next = NULL };</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 4: BEFORE VS AFTER BRANCHING SHOWCASE (POINT 5)
+       ========================================================================= -->
+  <section id="branching-section" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Edge Case Architecture</span>
+        <h2 class="section-title">Before vs After Branching Demonstration</h2>
+        <p class="section-desc">
+          When visiting a new page after moving backward, orphaned forward links are purged to maintain history integrity.
+        </p>
+      </div>
+
+      <div class="branching-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h3 style="font-size: 1.15rem; color: #fff; margin-bottom: 0.25rem;">Branch Pruning Lifecycle</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">
+              Standard browser behavior: New visit post-backward cuts off all forward pages.
+            </p>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="runBranchingShowcase()">▶ Simulate Branch Prune</button>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <div style="font-size: 0.8rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-bottom: 0.5rem;">
+            1. BEFORE: User navigates Google &rarr; YouTube &rarr; Instagram &rarr; ChatGPT, then clicks Back &times; 2:
+          </div>
+          <div class="branch-flow-row">
+            <div class="branch-node-pill">Google</div>
+            <span>&rarr;</span>
+            <div class="branch-node-pill current">YouTube [CURRENT]</div>
+            <span>&rarr;</span>
+            <div class="branch-node-pill">Instagram</div>
+            <span>&rarr;</span>
+            <div class="branch-node-pill">ChatGPT</div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size: 0.8rem; font-weight: 700; color: #34d399; text-transform: uppercase; margin-bottom: 0.5rem;">
+            2. AFTER: User visits "Wikipedia" from YouTube (Forward branch is dropped):
+          </div>
+          <div class="branch-flow-row">
+            <div class="branch-node-pill">Google</div>
+            <span>&rarr;</span>
+            <div class="branch-node-pill">YouTube</div>
+            <span>&rarr;</span>
+            <div class="branch-node-pill added">Wikipedia [CURRENT]</div>
+            <span style="margin: 0 0.5rem; color: #64748b;">|</span>
+            <div class="branch-node-pill pruned">Instagram [free()]</div>
+            <div class="branch-node-pill pruned">ChatGPT [free()]</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 5: SEARCH & HISTORY TIMELINE (POINTS 6 & 8)
+       ========================================================================= -->
+  <section id="timeline-section" class="section">
+    <div class="container">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 2rem;">
+        
+        <!-- Search History with Live Traversal Highlighting (Point 6) -->
+        <div class="glass" style="border-radius: var(--radius-xl); padding: 1.75rem;">
+          <div style="margin-bottom: 1.25rem;">
+            <span class="section-tag">Linear Traversal O(N)</span>
+            <h3 style="font-size: 1.25rem; font-weight: 700;">Search History Highlighting</h3>
+            <p style="font-size: 0.825rem; color: var(--text-muted);">
+              Scans sequentially from head to matching node, visualizing the linear scan cost.
+            </p>
+          </div>
+
+          <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+            <input type="text" id="history-search-input" placeholder="Type keyword (e.g., wiki, tube, chat)..." style="flex: 1; background: #070c18; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.55rem 0.85rem; color: #fff; font-size: 0.85rem; outline: none;" />
+            <button id="btn-run-search" class="btn btn-primary btn-sm">Linear Search</button>
+          </div>
+
+          <div id="search-results-banner" style="display: none; background: #090e1d; border: 1px solid rgba(59,130,246,0.3); border-radius: var(--radius-md); padding: 0.85rem; font-size: 0.8rem; font-family: var(--font-mono); margin-top: 1rem;"></div>
+        </div>
+
+        <!-- History Timeline View (Point 8) -->
+        <div class="glass" style="border-radius: var(--radius-xl); padding: 1.75rem;">
+          <div style="margin-bottom: 1.25rem;">
+            <span class="section-tag">Chronological Record</span>
+            <h3 style="font-size: 1.25rem; font-weight: 700;">History Timeline View</h3>
+            <p style="font-size: 0.825rem; color: var(--text-muted);">
+              Chronological log of visited pages with recorded timestamps.
+            </p>
+          </div>
+
+          <div class="timeline-list" id="history-timeline-container"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 6: PERFORMANCE BENCHMARK (POINT 12)
+       ========================================================================= -->
+  <section id="benchmarks" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Scalability Verification</span>
+        <h2 class="section-title">Performance Benchmark (10 to 100,000 Nodes)</h2>
+        <p class="section-desc">
+          Click any scale card below to run real-time browser latency benchmarks.
+        </p>
+      </div>
+
+      <div class="benchmark-scale-grid">
+        <div class="benchmark-card-box" data-count="10">
+          <div class="bench-node-count">10 Nodes</div>
+          <div class="bench-time-val" id="bench-time-10">Run Test &rarr;</div>
+        </div>
+        <div class="benchmark-card-box" data-count="100">
+          <div class="bench-node-count">100 Nodes</div>
+          <div class="bench-time-val" id="bench-time-100">Run Test &rarr;</div>
+        </div>
+        <div class="benchmark-card-box" data-count="1000">
+          <div class="bench-node-count">1,000 Nodes</div>
+          <div class="bench-time-val" id="bench-time-1000">Run Test &rarr;</div>
+        </div>
+        <div class="benchmark-card-box" data-count="10000">
+          <div class="bench-node-count">10,000 Nodes</div>
+          <div class="bench-time-val" id="bench-time-10000">Run Test &rarr;</div>
+        </div>
+        <div class="benchmark-card-box" data-count="100000">
+          <div class="bench-node-count">100,000 Nodes</div>
+          <div class="bench-time-val" id="bench-time-100000">Run Test &rarr;</div>
+        </div>
+      </div>
+
+      <!-- Real-Time Time Complexity Chart vs History Scale -->
+      <div class="glass" style="border-radius: var(--radius-xl); padding: 1.5rem; margin-top: 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 1rem;">
+          <div>
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin: 0;">Scale Latency Curve: DLL vs Dynamic Array</h4>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">
+              Doubly Linked List Back/Forward speed remains flat at \(O(1)\) whether history has 10 or 100,000 pages.
+            </p>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: center; overflow-x: auto;">
+          <canvas id="performance-canvas" width="640" height="200" style="max-width: 100%;"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 7: INTERACTIVE "WHY DLL?" COMPARISON (POINT 7)
+       ========================================================================= -->
+  <section id="comparison" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Data Structure Trade-Offs</span>
+        <h2 class="section-title">Interactive "Why DLL?" Comparison</h2>
+        <p class="section-desc">
+          Evaluating Doubly Linked List against alternative candidates.
+        </p>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- Doubly Linked List (Chosen) -->
+        <div class="ds-card featured">
+          <div class="featured-ribbon">CHOSEN SOLUTION</div>
+          <h3 class="ds-title" style="color: #60a5fa;">Doubly Linked List</h3>
+          <span class="ds-badge">Bidirectional Pointers (\(prev, next\))</span>
+          
+          <div class="ds-metrics">
+            <div class="metric-row"><span>Back Traversal:</span><span class="complexity-o1">\(O(1)\)</span></div>
+            <div class="metric-row"><span>Forward Traversal:</span><span class="complexity-o1">\(O(1)\)</span></div>
+            <div class="metric-row"><span>Visit (Append):</span><span class="complexity-o1">\(O(1)\)</span></div>
+            <div class="metric-row"><span>Branch Pruning:</span><span class="complexity-o1">\(O(1)\) Amort.</span></div>
+            <div class="metric-row"><span>Space Complexity:</span><span class="complexity-o1">\(O(N)\)</span></div>
+          </div>
+          <p style="font-size: 0.825rem; color: var(--text-muted); margin-top: auto;">
+            <strong>Advantages:</strong> Instant bidirectional navigation. Forward branches can be detached in \(O(1)\) time without element shifting.
+          </p>
+        </div>
+
+        <!-- Dynamic Array / Vector -->
+        <div class="ds-card glass">
+          <h3 class="ds-title">Dynamic Array / Vector</h3>
+          <span class="ds-badge">Contiguous Buffer</span>
+          
+          <div class="ds-metrics">
+            <div class="metric-row"><span>Back Traversal:</span><span class="complexity-o1">\(O(1)\)</span></div>
+            <div class="metric-row"><span>Forward Traversal:</span><span class="complexity-o1">\(O(1)\)</span></div>
+            <div class="metric-row"><span>Visit (Append):</span><span class="complexity-o1">\(O(1)\)</span></div>
+            <div class="metric-row"><span>Branch Pruning:</span><span class="complexity-bad">\(O(N)\) Copy/Shift</span></div>
+            <div class="metric-row"><span>Space:</span><span class="complexity-on">\(O(N)\) Over-alloc</span></div>
+          </div>
+          <p style="font-size: 0.825rem; color: var(--text-muted); margin-top: auto;">
+            <strong>Limitations:</strong> Truncating forward history requires copying or resizing the buffer in \(O(N)\) time.
+          </p>
+        </div>
+
+        <!-- Two-Stack Model -->
+        <div class="ds-card glass">
+          <h3 class="ds-title">Two-Stack Model</h3>
+          <span class="ds-badge">Back + Forward Stacks</span>
+          
+          <div class="ds-metrics">
+            <div class="metric-row"><span>Back Traversal:</span><span class="complexity-o1">\(O(1)\) Push/Pop</span></div>
+            <div class="metric-row"><span>Forward Traversal:</span><span class="complexity-o1">\(O(1)\) Push/Pop</span></div>
+            <div class="metric-row"><span>Visit (Append):</span><span class="complexity-o1">\(O(1)\)</span></div>
+            <div class="metric-row"><span>Full Traversal:</span><span class="complexity-bad">\(O(N)\) Destructive</span></div>
+            <div class="metric-row"><span>Space:</span><span class="complexity-o1">\(O(N)\)</span></div>
+          </div>
+          <p style="font-size: 0.825rem; color: var(--text-muted); margin-top: auto;">
+            <strong>Limitations:</strong> Cannot inspect or search the history list in order without popping both stacks.
+          </p>
+        </div>
+
+        <!-- Single Stack -->
+        <div class="ds-card glass">
+          <h3 class="ds-title">Single Stack</h3>
+          <span class="ds-badge">LIFO Stack</span>
+          
+          <div class="ds-metrics">
+            <div class="metric-row"><span>Back Traversal:</span><span class="complexity-o1">\(O(1)\) Pop</span></div>
+            <div class="metric-row"><span>Forward Traversal:</span><span class="complexity-bad">Impossible</span></div>
+            <div class="metric-row"><span>Visit:</span><span class="complexity-o1">\(O(1)\)</span></div>
+            <div class="metric-row"><span>Bidirectional:</span><span class="complexity-bad">Unsupported</span></div>
+            <div class="metric-row"><span>Space:</span><span class="complexity-o1">\(O(N)\)</span></div>
+          </div>
+          <p style="font-size: 0.825rem; color: var(--text-muted); margin-top: auto;">
+            <strong>Limitations:</strong> Once a webpage is popped to go back, it cannot be recovered for forward traversal.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 8: DSA DEBUG CONSOLE (POINT 10) & C CODE
+       ========================================================================= -->
+  <section class="section">
+    <div class="container">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 2rem;">
+        
+        <!-- DSA Terminal Window (Point 10) -->
+        <div>
+          <div style="margin-bottom: 1rem;">
+            <span class="section-tag">System Logs</span>
+            <h3 style="font-size: 1.25rem; font-weight: 700;">DSA Debug Console (C Trace)</h3>
+          </div>
+
+          <div class="terminal-window">
+            <div class="terminal-header">
+              <span>Terminal &bull; Memory &amp; Pointer Execution Stream</span>
+              <div style="display: flex; gap: 0.4rem;">
+                <button id="btn-copy-console" class="btn btn-secondary btn-sm" style="padding: 0.15rem 0.5rem; font-size: 0.7rem;">Copy</button>
+                <button id="btn-clear-console" class="btn btn-secondary btn-sm" style="padding: 0.15rem 0.5rem; font-size: 0.7rem;">Clear</button>
+              </div>
+            </div>
+            <div class="terminal-body" id="dsa-terminal-body"></div>
+          </div>
+        </div>
+
+        <!-- C Code Viewer -->
+        <div>
+          <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+              <span class="section-tag">Source Code</span>
+              <h3 style="font-size: 1.25rem; font-weight: 700;">C Implementation</h3>
+            </div>
+            <a href="browser_history.c" download="browser_history.c" class="btn btn-secondary btn-sm" style="font-size: 0.75rem;">
+              ⬇️ browser_history.c
+            </a>
+          </div>
+
+          <div class="code-container" style="margin-bottom: 0;">
+            <div class="code-editor" style="max-height: 220px;">
+              <pre><code id="code-display">// browser_history.c - Phase 2 & 3 Review
+void visit(BrowserHistory *h, char *url) {
+    Node *f = h->current->next;
+    while (f) { // Clear forward nodes
+        Node *t = f->next; free(f); f = t;
+    }
+    Node *n = new_node(url);
+    n->prev = h->current;
+    h->current->next = n;
+    h->current = n;
+    h->pos++; h->length = h->pos + 1;
+}
+
+char* back(BrowserHistory *h) {
+    if (!h->current->prev) return NULL;
+    h->current = h->current->prev;
+    h->pos--;
+    return h->current->url;
+}</code></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 9: AUTOMATED TEST SUITE (10 / 10 AS IN SLIDE 6)
+       ========================================================================= -->
+  <section id="test-suite" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Quality Assurance</span>
+        <h2 class="section-title">Automated Verification Suite (10 / 10 Tests)</h2>
+        <p class="section-desc">
+          Exact replication of the test suite from Slide 6 of the Capstone presentation.
+        </p>
+      </div>
+
+      <div class="test-suite-card glass">
+        <div class="test-header">
+          <div class="test-score-badge">
+            <div class="score-circle">
+              <div class="score-inner" id="tests-passed-score">10/10</div>
+            </div>
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 700;">Test Suite Status: 100% Passed</h3>
+              <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">
+                Validates functional requirements, pointer integrity, and edge case resilience.
+              </p>
+            </div>
+          </div>
+          <button id="btn-run-all-tests" class="btn btn-success">
+            ▶️ Run Automated Test Suite
+          </button>
+        </div>
+
+        <table class="test-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Test Case Description</th>
+              <th>Expected Outcome</th>
+              <th>Execution Time</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="test-id-pill">T1</span></td>
+              <td>Visit 4 pages (Google &rarr; YouTube &rarr; Instagram &rarr; ChatGPT)</td>
+              <td><code>Current = ChatGPT, pos = 3, length = 4</code></td>
+              <td id="time-T1">0.14 ms</td>
+              <td><span id="status-T1" class="test-status-pill pass">PASSED</span></td>
+            </tr>
+            <tr>
+              <td><span class="test-id-pill">T2-T3</span></td>
+              <td>Back twice from ChatGPT</td>
+              <td><code>Instagram, then YouTube (Current: YouTube)</code></td>
+              <td id="time-T2-T3">0.08 ms</td>
+              <td><span id="status-T2-T3" class="test-status-pill pass">PASSED</span></td>
+            </tr>
+            <tr>
+              <td><span class="test-id-pill">T4</span></td>
+              <td>Forward once from YouTube</td>
+              <td><code>Current = Instagram</code></td>
+              <td id="time-T4">0.07 ms</td>
+              <td><span id="status-T4" class="test-status-pill pass">PASSED</span></td>
+            </tr>
+            <tr>
+              <td><span class="test-id-pill">T5</span></td>
+              <td>Back at first page (Origin Boundary Test)</td>
+              <td><code>Gracefully blocked: returns NULL, stays at Google</code></td>
+              <td id="time-T5">0.05 ms</td>
+              <td><span id="status-T5" class="test-status-pill pass">PASSED</span></td>
+            </tr>
+            <tr>
+              <td><span class="test-id-pill">T6</span></td>
+              <td>Forward at newest page (Tail Boundary Test)</td>
+              <td><code>Gracefully blocked: returns NULL, stays at ChatGPT</code></td>
+              <td id="time-T6">0.06 ms</td>
+              <td><span id="status-T6" class="test-status-pill pass">PASSED</span></td>
+            </tr>
+            <tr>
+              <td><span class="test-id-pill">T7-T8</span></td>
+              <td>Visit Wikipedia after Back (Branch Pruning Verification)</td>
+              <td><code>Forward branch cleared, order: Google &rarr; YouTube &rarr; Wikipedia</code></td>
+              <td id="time-T7-T8">0.12 ms</td>
+              <td><span id="status-T7-T8" class="test-status-pill pass">PASSED</span></td>
+            </tr>
+            <tr>
+              <td><span class="test-id-pill">T9</span></td>
+              <td>Search keyword "wiki"</td>
+              <td><code>Wikipedia successfully matched &amp; located in O(N)</code></td>
+              <td id="time-T9">0.09 ms</td>
+              <td><span id="status-T9" class="test-status-pill pass">PASSED</span></td>
+            </tr>
+            <tr>
+              <td><span class="test-id-pill">T10</span></td>
+              <td>Scale Stress Test (100,000 pages visited, 99,999 back)</td>
+              <td><code>Position and size correct (pos: 1, len: 100,001)</code></td>
+              <td id="time-T10">26.4 ms</td>
+              <td><span id="status-T10" class="test-status-pill pass">PASSED</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       SECTION 10: PRESENTATION SLIDE DECK & VIVA VOCE
+       ========================================================================= -->
+  <section id="viva" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Faculty Review</span>
+        <h2 class="section-title">Presentation Slide Deck &amp; Viva Voce Guide</h2>
+        <p class="section-desc">
+          Slide-by-slide summaries and core theoretical questions for final review.
+        </p>
+      </div>
+
+      <!-- Slide Deck Viewer -->
+      <div class="presentation-card">
+        <div class="presentation-toolbar">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <button id="btn-prev-slide" class="btn btn-secondary btn-sm">&larr; Previous Slide</button>
+            <button id="btn-next-slide" class="btn btn-secondary btn-sm">Next Slide &rarr;</button>
+          </div>
+          <div style="font-size: 0.85rem; font-family: var(--font-mono); color: #38bdf8;">
+            Slide <span id="slide-num">1 / 7</span>
+          </div>
+        </div>
+
+        <div class="slide-display-area">
+          <div class="slide-number-badge">CSE-C &bull; 23CSE203</div>
+          <div class="slide-topic-badge" id="slide-topic">DSA Capstone Project Review</div>
+          <h2 class="slide-h2" id="slide-title">Browser History Management Using Data Structures</h2>
+          <div class="slide-content-box" id="slide-bullets"></div>
+        </div>
+      </div>
+
+      <!-- Viva Voce Q&A Grid -->
+      <div class="faq-grid" style="margin-top: 2rem;">
+        <div class="faq-card">
+          <div class="faq-q"><span>💡</span> Why use a Doubly Linked List instead of an Array?</div>
+          <div class="faq-a">An Array requires contiguous memory. When visiting a new page after moving backward, deleting orphaned forward elements requires \(O(N)\) shifting or resizing. A Doubly Linked List detaches forward nodes via pointers in \(O(1)\) amortized time with zero shifting.</div>
+        </div>
+        <div class="faq-card">
+          <div class="faq-q"><span>💡</span> How does <code>visit()</code> avoid memory leaks in C?</div>
+          <div class="faq-a">In C, orphaned heap blocks remain allocated until explicitly freed. Our <code>visit()</code> function traverses orphaned nodes starting at <code>current->next</code> with <code>while (f) { Node *t = f->next; free(f); f = t; }</code>, freeing all dropped nodes.</div>
+        </div>
+        <div class="faq-card">
+          <div class="faq-q"><span>💡</span> Why not use a Circular Doubly Linked List?</div>
+          <div class="faq-a">A web browser history is strictly linear with a clear start and end. Making it circular would cause clicking Back at the homepage to wrap around to the newest page, violating standard navigation rules.</div>
+        </div>
+        <div class="faq-card">
+          <div class="faq-q"><span>💡</span> What is the time complexity of Back and Forward?</div>
+          <div class="faq-a">Strictly \(O(1)\) constant time because pointers provide direct address access (<code>current = current->prev</code> or <code>current = current->next</code>).</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================================
+       FOOTER
+       ========================================================================= -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3 style="color: #fff; font-size: 1.1rem; margin-bottom: 0.75rem;">DSA Capstone Project</h3>
+          <p style="color: var(--text-muted); font-size: 0.85rem; max-width: 440px; margin-bottom: 1rem;">
+            Browser History Management Using Data Structures. Course: <strong>23CSE203 Data Structures and Algorithms</strong>.
+          </p>
+          <div style="font-size: 0.8rem; color: #64748b;">
+            Amrita Vishwa Vidyapeetham &bull; Amrita School of Computing, Chennai
+          </div>
+        </div>
+
+        <div>
+          <h4 style="color: #fff; font-size: 0.9rem; margin-bottom: 0.75rem;">Students</h4>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.4rem;">
+            <strong>Harneesh K</strong><br><span style="font-family: var(--font-mono); font-size: 0.75rem;">CH.SC.U4CSE25217 &bull; CSE-C</span>
+          </p>
+          <p style="color: var(--text-muted); font-size: 0.85rem;">
+            <strong>Harish G</strong><br><span style="font-family: var(--font-mono); font-size: 0.75rem;">CH.SC.U4CSE25259 &bull; CSE-C</span>
+          </p>
+        </div>
+
+        <div>
+          <h4 style="color: #fff; font-size: 0.9rem; margin-bottom: 0.75rem;">Faculty Mentors</h4>
+          <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.4rem;">
+            <strong>Dr.K.V.MEENATCHI</strong><br><span style="font-size: 0.75rem;">Department of CSE</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        &copy; 2026 Harneesh K &amp; Harish G &bull; CSE Section C &bull; All Rights Reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
