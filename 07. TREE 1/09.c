@@ -9,7 +9,7 @@ void merge1(int i, int j) { int rA = find1(i), rB = find1(j); if (rA != rB) p1[r
 void merge2(int i, int j) { int rA = find2(i), rB = find2(j); if (rA != rB) p2[rA] = rB; }
 int main() {
     int n, m1, m2;
-    printf("Roll Number: CH.SC.U4CSE25248\n");
+    printf("Roll Number: CH.SC.U4CSE25217\n");
     if (scanf("%d %d %d", &n, &m1, &m2) == 3) {
         for (int i = 1; i <= n; i++) p1[i] = p2[i] = i;
         for (int i = 0; i < m1; i++) { int u, v; scanf("%d %d", &u, &v); merge1(u, v); }
