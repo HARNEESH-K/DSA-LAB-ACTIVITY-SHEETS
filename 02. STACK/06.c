@@ -22,7 +22,7 @@ void printArray(int arr[],int n)
 int main()
 {
     int n,price[MAX],S[MAX],i;
-    printf("Roll No: CH.SC.U4CSE25145\n");
+    printf("Roll No: CH.SC.U4CSE25217\n");
     scanf("%d",&n);
     for(i=0;i<n;i++)
         scanf("%d",&price[i]);
