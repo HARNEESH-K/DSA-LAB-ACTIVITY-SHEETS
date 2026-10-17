@@ -51,7 +51,7 @@ long long query(int node, int L, int R, int ql, int qr) {
 }
 int main() {
     int n, q;
-    printf("Roll Number: CH.SC.U4CSE25248\n");
+    printf("Roll Number: CH.SC.U4CSE25217\n");
     if (scanf("%d %d", &n, &q) == 2) {
         for (int i = 1; i <= n; i++) scanf("%lld", &arr[i]);
         build(1, 1, n);
