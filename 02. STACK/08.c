@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 int main() {
-    printf("Roll.No: CH.SC.U4CSE25145\n");
+    printf("Roll.No: CH.SC.U4CSE25217\n");
     int n;
     scanf("%d",&n);
     long long *arr=malloc(n*sizeof(long long));
