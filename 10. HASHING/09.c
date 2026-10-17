@@ -5,7 +5,7 @@ int div_cnt[MAX_VAL];
 int freq[MAX_VAL];
 int main() {
     int n;
-    printf("Roll Number: CH.SC.U4CSE25248\n");
+    printf("Roll Number: CH.SC.U4CSE25217\n");
     for (int i = 1; i < MAX_VAL; i++) {
         for (int j = i; j < MAX_VAL; j += i) {
             div_cnt[j]++;
