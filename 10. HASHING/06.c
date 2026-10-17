@@ -11,7 +11,7 @@ int compare_elements(const void* a, const void* b) {
 }
 int main() {
     int m, q, n;
-    printf("Roll Number: CH.SC.U4CSE25248\n");
+    printf("Roll Number: CH.SC.U4CSE25217\n");
     if (scanf("%d %d %d", &m, &q, &n) == 3) {
         global_m = m;
         int* arr = (int*)malloc(n * sizeof(int));
