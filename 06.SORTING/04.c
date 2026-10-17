@@ -2,7 +2,7 @@
 #include <stdlib.h>
 int main() {
     int n;
-    printf("Roll Number: CH.SC.U4CSE25248\n");
+    printf("Roll Number: CH.SC.U4CSE25217\n");
     if (scanf("%d", &n) == 1) {
         long long *arr = (long long *)malloc(n * sizeof(long long));
         for (int i = 0; i < n; i++) {
